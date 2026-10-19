@@ -24,20 +24,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.vmdemo.data.Catalogos
+import com.example.vmdemo.sesion.SesionViewModel
 import com.example.vmdemo.ui.components.OpcionesRadio
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilScreen(
+    sesionVm: SesionViewModel,
     onRegresar: () -> Unit,
     onCerrarSesion: () -> Unit
 ) {
     // PASO 2 (el problema): Perfil también tiene su propio estado.
     // Si cambias la estancia aquí, Inicio nunca se entera.
-    val nombre by remember { mutableStateOf("") }
-    val rol by remember { mutableStateOf("") }
-    var estancia by remember { mutableStateOf("") }
+   // val nombre by remember { mutableStateOf("") }
+   // val rol by remember { mutableStateOf("") }
+   // var estancia by remember { mutableStateOf("") }
+
+    val sesion by sesionVm.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -63,19 +68,19 @@ fun PerfilScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = nombre.ifBlank { "(sin nombre)" },
+                text = sesion.nombre.ifBlank { "(sin nombre)" },
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(
-                text = rol.ifBlank { "(sin rol)" },
+                text = sesion.rol.ifBlank { "(sin rol)" },
                 style = MaterialTheme.typography.titleMedium
             )
-            Text("Estancia actual: ${estancia.ifBlank { "(sin estancia)" }}")
+            Text("Estancia actual: ${sesion.estancia.ifBlank { "(sin estancia)" }}")
             OpcionesRadio(
                 titulo = "Cambiar estancia",
                 opciones = Catalogos.ESTANCIAS,
-                seleccion = estancia,
-                onSeleccion = { estancia = it }
+                seleccion = sesion.estancia,
+                onSeleccion = { sesionVm.cambiarEstancia(it) }
             )
             OutlinedButton(
                 onClick = onCerrarSesion,

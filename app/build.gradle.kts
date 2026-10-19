@@ -37,6 +37,12 @@ android {
 }
 
 dependencies {
+
+    // ViewModel en Compose (paso 3)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+
+
     implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
